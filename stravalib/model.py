@@ -502,6 +502,7 @@ class SegmentExplorerResult(LoadableEntity):
     elev_difference = Attribute(float, units=uh.meters)  #: Total elevation difference over segment.
     distance = Attribute(float, units=uh.meters)  #: Distance of segment.
     points = Attribute(str)  #: Encoded Google polyline of points in segment
+    starred = Attribute(bool)  #: Whether this segment is starred by authenticated athlete
 
     @property
     def segment(self):
@@ -846,6 +847,7 @@ class SegmentLeaderboardEntry(BoundEntity):
     start_date_local = TimestampAttribute((SUMMARY, DETAILED), tzinfo=None)  #: :class:`datetime.datetime` when this effort was started in activity timezone
     activity_id = Attribute(int)  #: The numeric ID of the associated activity for this effort.
     rank = Attribute(int)  #: The rank on the leaderboard.
+    neighborhood_index = Attribute(int)
 
     def __repr__(self):
         return '<SegmentLeaderboardEntry rank={0} athlete_name={1!r}>'.format(self.rank, self.athlete_name)
@@ -887,6 +889,8 @@ class SegmentLeaderboard(Sequence, BoundEntity):
     effort_count = Attribute(int)
     entry_count = Attribute(int)
     entries = EntityCollection(SegmentLeaderboardEntry)
+    neighborhood_count = Attribute(int)
+    kom_type = Attribute(six.text_type)
 
     def __iter__(self):
         return iter(self.entries)
